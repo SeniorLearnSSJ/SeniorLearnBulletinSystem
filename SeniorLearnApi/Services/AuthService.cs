@@ -95,6 +95,7 @@ public class AuthService
             AccessToken = accessToken,
             RefreshToken = refreshToken,
             ExpiresIn = _jwtSettings.AccessTokenExpirationMinutes * 60,
+            Role = user.Role.ToString()
         };
     }
 
@@ -123,7 +124,8 @@ public class AuthService
         {
             AccessToken = accessToken,
             RefreshToken = newRefreshToken,
-            ExpiresIn = _jwtSettings.AccessTokenExpirationMinutes * 60
+            ExpiresIn = _jwtSettings.AccessTokenExpirationMinutes * 60,
+            Role = user.Role.ToString()
         };
     }
 
