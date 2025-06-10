@@ -50,7 +50,7 @@ const handleSubmit = async () => {
         navigation.navigate("BulletinChoice");
       } else {
         // Since login returns only boolean, no message available here
-        window.alert("Login failed: Invalid username or password");
+        window.alert("Login failed: 123Invalid username or password");
       }
     } catch (error: any) {
       const message =
