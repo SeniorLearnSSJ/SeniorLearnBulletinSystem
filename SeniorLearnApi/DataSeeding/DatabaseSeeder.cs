@@ -79,7 +79,8 @@ public class DatabaseSeeder
                     Email = "seniorlearnAdmin@slearn.org.au",
                     Username = "Admin",
                     PasswordHash = HashPassword("user123"),
-                    MemberSince = new DateTime(2020, 5, 9, 15, 30, 45)
+                    MemberSince = new DateTime(2020, 5, 9, 15, 30, 45),
+                    Role = UserRole.Administrator
                 },
                 new User
                 {
@@ -89,7 +90,8 @@ public class DatabaseSeeder
                     Email = "anonUser123@slearn.org.au",
                     Username = "AnonUser123",
                     PasswordHash = HashPassword("user123"),
-                    MemberSince = new DateTime(2022, 5, 9, 15, 30, 45)
+                    MemberSince = new DateTime(2022, 5, 9, 15, 30, 45),
+                    Role = UserRole.Member
                 },
                 new User
                 {
@@ -109,7 +111,8 @@ public class DatabaseSeeder
                     Email = "TheatreSenior@slearn.org.au",
                     Username = "TheatreSenior",
                     PasswordHash = HashPassword("user123"),
-                    MemberSince = new DateTime(2024, 8, 3, 15, 30, 45)
+                    MemberSince = new DateTime(2024, 8, 3, 15, 30, 45),
+                    Role = UserRole.Member
                 },
                 new User
                 {
@@ -119,7 +122,8 @@ public class DatabaseSeeder
                     Email = "chenZhonghua@slearn.org.au",
                     Username = "ChenZhonghua",
                     PasswordHash = HashPassword("user123"),
-                    MemberSince = new DateTime(2022, 1, 20, 15, 30, 45)
+                    MemberSince = new DateTime(2022, 1, 20, 15, 30, 45),
+                    Role = UserRole.Member
                 },
                 new User
                 {
@@ -129,7 +133,8 @@ public class DatabaseSeeder
                     Email = "program@slearn.org.au",
                     Username = "Peter",
                     PasswordHash = HashPassword("user123"),
-                    MemberSince = new DateTime(2023, 5, 4, 15, 30, 45)
+                    MemberSince = new DateTime(2023, 5, 4, 15, 30, 45),
+                    Role = UserRole.Member
                 },
                 new User
                 {
@@ -139,7 +144,8 @@ public class DatabaseSeeder
                     Email = "seancemagic@slearn.org.au",
                     Username = "SeniorScammer",
                     PasswordHash = HashPassword("user123"),
-                    MemberSince = new DateTime(2025, 5, 4, 15, 30, 45)
+                    MemberSince = new DateTime(2025, 5, 4, 15, 30, 45),
+                    Role = UserRole.Member
                 },
                 new User
                 {
@@ -149,7 +155,8 @@ public class DatabaseSeeder
                     Email = "seniorLearnFanClub@slearn.org.au",
                     Username = "SeniorLearnFan",
                     PasswordHash = HashPassword("user123"),
-                    MemberSince = new DateTime(2025, 5, 4, 15, 30, 45)
+                    MemberSince = new DateTime(2025, 5, 4, 15, 30, 45),
+                    Role = UserRole.Member
                 }
             };
             await userCollection.InsertManyAsync(users);

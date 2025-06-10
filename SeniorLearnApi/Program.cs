@@ -93,7 +93,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//DeleteMongoDbScript();
+
 await RunMongoScript();
 
 app.UseHttpsRedirection();
