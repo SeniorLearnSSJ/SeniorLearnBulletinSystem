@@ -1,6 +1,0 @@
-@SeniorLearnApi_HostAddress = http://localhost:5143
-
-GET {{SeniorLearnApi_HostAddress}}/api/bulletins/member
-Accept: application/json
-
-###

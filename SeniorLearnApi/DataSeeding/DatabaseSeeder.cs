@@ -101,7 +101,8 @@ public class DatabaseSeeder
                     Email = "User101@slearn.org.au",
                     Username = "User101",
                     PasswordHash = HashPassword("user123"),
-                    MemberSince = new DateTime(2023, 10, 4, 15, 30, 45)
+                    MemberSince = new DateTime(2023, 10, 4, 15, 30, 45),
+                    Role = UserRole.Member
                 },
                 new User
                 {
@@ -112,7 +113,7 @@ public class DatabaseSeeder
                     Username = "TheatreSenior",
                     PasswordHash = HashPassword("user123"),
                     MemberSince = new DateTime(2024, 8, 3, 15, 30, 45),
-                    Role = UserRole.Member
+                    Role = UserRole.Member,
                 },
                 new User
                 {
