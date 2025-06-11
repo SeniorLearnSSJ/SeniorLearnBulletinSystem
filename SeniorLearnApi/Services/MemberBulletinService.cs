@@ -122,17 +122,24 @@ public class MemberBulletinService : IBulletinTypeListService<MemberBulletin>
         return MapToMemberBulletinDetailResponse(newMemberBulletin);
     }
 
-    public async Task<MemberBulletinDetailResponse?> UpdateMemberBulletinAsync(string id, UpdateMemberBulletinRequest request, string memberId)
+    public async Task<MemberBulletinDetailResponse?> UpdateMemberBulletinAsync(
+        string id,
+        UpdateMemberBulletinRequest request,
+        string currentUserId,
+        bool isAdmin = false)
     {
         if (!ObjectId.TryParse(id, out ObjectId objectId))
         {
             return null;
         }
 
-        var filter = Builders<MemberBulletin>.Filter.And(
-            Builders<MemberBulletin>.Filter.Eq("_id", objectId),
-            Builders<MemberBulletin>.Filter.Eq("AuthorId", memberId)
-        );
+        // Build filter - admin can update any bulletin, member can only update their own
+        var filter = isAdmin
+            ? Builders<MemberBulletin>.Filter.Eq("_id", objectId)
+            : Builders<MemberBulletin>.Filter.And(
+                Builders<MemberBulletin>.Filter.Eq("_id", objectId),
+                Builders<MemberBulletin>.Filter.Eq("AuthorId", currentUserId)
+            );
 
         var update = Builders<MemberBulletin>.Update
             .Set(b => b.Title, request.Title)
@@ -151,17 +158,22 @@ public class MemberBulletinService : IBulletinTypeListService<MemberBulletin>
         return null;
     }
 
-    public async Task<bool> DeleteMemberBulletinAsync(string id, string memberId)
+    public async Task<bool> DeleteMemberBulletinAsync(
+        string id,
+        string currentUserId,
+        bool isAdmin = false)
     {
         if (!ObjectId.TryParse(id, out ObjectId objectId))
         {
             return false;
         }
 
-        var filter = Builders<MemberBulletin>.Filter.And(
-            Builders<MemberBulletin>.Filter.Eq("_id", objectId),
-            Builders<MemberBulletin>.Filter.Eq("AuthorId", memberId)
-        );
+        var filter = isAdmin
+            ? Builders<MemberBulletin>.Filter.Eq("_id", objectId)
+            : Builders<MemberBulletin>.Filter.And(
+                Builders<MemberBulletin>.Filter.Eq("_id", objectId),
+                Builders<MemberBulletin>.Filter.Eq("AuthorId", currentUserId)
+            );
 
         var result = await _memberBulletinList.DeleteOneAsync(filter);
 

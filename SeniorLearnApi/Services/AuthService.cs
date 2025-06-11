@@ -17,9 +17,6 @@ public class AuthService
     private readonly UserSettingService _userSettingService;
     private readonly JwtSettings _jwtSettings;
 
-    // Mock data storage
-    private static readonly List<User> _users = new();
-
     public AuthService
     (   IMongoDatabase MongoDb,
         JwtSettings jwtSettings,
@@ -33,7 +30,6 @@ public class AuthService
         _userSettingService = userSettingService;
         _refreshTokenService = refreshTokenService;
     }
-
 
     public async Task<User?> RegisterAsync(RegisterRequest request)
     {

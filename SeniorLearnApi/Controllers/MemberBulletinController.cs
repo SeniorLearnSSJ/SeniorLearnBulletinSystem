@@ -67,7 +67,8 @@ public class MemberBulletinController : ControllerBase
             return Unauthorized(ApiResponse<MemberBulletinDetailResponse>.ErrorResponse("Unable to identify current user"));
         }
 
-        var response = await _memberBulletinService.UpdateMemberBulletinAsync(id, request, currentUserId);
+        var isAdmin = _userContextService.IsAdmin();
+        var response = await _memberBulletinService.UpdateMemberBulletinAsync(id, request, currentUserId, isAdmin);
         if (response == null)
         {
             return NotFound(ApiResponse<MemberBulletinDetailResponse>.ErrorResponse("Bulletin not found or you don't have permission to update it"));
@@ -85,7 +86,8 @@ public class MemberBulletinController : ControllerBase
             return Unauthorized(ApiResponse<bool>.ErrorResponse("Unable to identify current user"));
         }
 
-        var result = await _memberBulletinService.DeleteMemberBulletinAsync(id, currentUserId);
+        var isAdmin = _userContextService.IsAdmin();
+        var result = await _memberBulletinService.DeleteMemberBulletinAsync(id, currentUserId, isAdmin);
         if (!result)
         {
             return NotFound(ApiResponse<bool>.ErrorResponse("Bulletin not found or you don't have permission to delete it"));
