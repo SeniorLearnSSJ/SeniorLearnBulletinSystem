@@ -1,11 +1,20 @@
 import React from "react";
-import { View, Text, Button, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  ActivityIndicator,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import { ItemContext } from "../Context/context";
 import { ItemContextType, IItem } from "../types";
 import { useContext } from "react";
 import { useAuth } from "../Context/AuthContext";
+import { FontContext } from "../Context/fontContext";
+import { StyleSheet } from "react-native";
 
 const API_URL = "http://192.168.1.244:5143/api/bulletins/member";
 
@@ -20,6 +29,7 @@ export default function MemberBulletinDetailsScreen({
 }: MemberBulletinDetailsScreenProps) {
   const context = useContext(ItemContext);
   const { token, role } = useAuth();
+  const fontContext = useContext(FontContext);
 
   if (!context) {
     return <Text> Loading....</Text>;
@@ -33,8 +43,8 @@ export default function MemberBulletinDetailsScreen({
         method: "DELETE",
 
         headers: {
-        Authorization: `Bearer ${token}`, // <-- Add this header
-      },
+          Authorization: `Bearer ${token}`, // <-- Add this header
+        },
       });
 
       if (!response.ok) {
@@ -59,29 +69,117 @@ export default function MemberBulletinDetailsScreen({
   }
 
   return (
-    <View>
-      <Text>Member bulletin details</Text>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 100 }}
+    >
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        Member bulletin details
+      </Text>
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        {item.category}
+      </Text>
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>{item.id}</Text>
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        {" "}
+        {item.title}
+      </Text>
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        {" "}
+        {item.content}{" "}
+      </Text>
 
-      <Text>{item.category}</Text>
-      <Text>{item.id}</Text>
-      <Text> {item.title}</Text>
-      <Text> {item.content} </Text>
-
-      {token && (role === "Member" || role === "Administrator") && (
+      <View style={styles.bottomButtons}>
+        {token && (role === "Member" || role === "Administrator") && (
+          <TouchableOpacity
+            style={styles.buttonLeft}
+            onPress={() => navigation.navigate("Edit", { item })}
+          >
+            <Text
+              style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+            >
+              Edit
+            </Text>
+          </TouchableOpacity>
+        )}
+        {/* 
         <Button
           title="Edit"
           onPress={() => navigation.navigate("Edit", { item })}
         />
       )}
+ */}
+        {token && (role === "Member" || role === "Administrator") && (
+          <TouchableOpacity
+            style={styles.buttonRight}
+            onPress={() => {
+              deleteItem(item.id);
+            }}
+          >
+            <Text
+              style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+            >
+              Delete
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
 
-      {token && (role === "Member" || role === "Administrator") && (
-        <Button
-          title="Delete"
-          onPress={() => {
-            deleteItem(item.id);
-          }}
-        />
-      )}
-    </View>
+      <TouchableOpacity
+        style={[styles.buttonLeft, { marginTop: 30 }]}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}>
+          Back
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingBottom: 100,
+    backgroundColor: "#FFF5E6",
+  },
+
+  input: {
+    backgroundColor: "blue",
+    borderRadius: 10,
+    margin: 20,
+  },
+
+  bottomButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 30,
+  },
+
+  buttonLeft: {
+    flex: 1,
+    marginRight: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  buttonRight: {
+    flex: 1,
+    marginLeft: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  backButton: {
+    backgroundColor: "black",
+    borderRadius: 15,
+  },
+});

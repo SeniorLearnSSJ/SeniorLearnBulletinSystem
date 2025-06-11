@@ -15,6 +15,7 @@ import { useContext } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { ItemContext } from "../Context/context";
 import { FontContext } from "../Context/fontContext";
+import { StyleSheet } from "react-native";
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -36,41 +37,30 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [password, setPassword] = useState("");
   const { token, setToken } = authContext;
 
+  const handleSubmit = async () => {
+    if (username.trim() && password.trim()) {
+      try {
+        const success = await login(username, password);
 
-
-
-
-const handleSubmit = async () => {
-  if (username.trim() && password.trim()) {
-    try {
-      const success = await login(username, password);
-
-      if (success) {
-        window.alert("Logged in");
-        navigation.navigate("BulletinChoice");
-      } else {
-        // Since login returns only boolean, no message available here
-        window.alert("Login failed: 123Invalid username or password");
+        if (success) {
+          window.alert("Logged in");
+          navigation.navigate("BulletinChoice");
+        } else {
+          // Since login returns only boolean, no message available here
+          window.alert("Login failed: 123Invalid username or password");
+        }
+      } catch (error: any) {
+        const message =
+          error?.response?.data?.message ||
+          error?.message ||
+          "An unknown error occurred";
+        console.error("Login error:", message);
+        window.alert(`Login error: ${message}`);
       }
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        "An unknown error occurred";
-      console.error("Login error:", message);
-      window.alert(`Login error: ${message}`);
+    } else {
+      window.alert("Fill out all fields");
     }
-  } else {
-    window.alert("Fill out all fields");
-  }
-};
-
-
-
-
-
-
-
+  };
 
   /*  const login = async (name: string) => {
 
@@ -104,14 +94,14 @@ const handleSubmit = async () => {
         placeholder="Enter username"
         value={username}
         onChangeText={(newText) => setUsername(newText)}
-        style={{ fontSize: fontContext?.fontSize || 16 }}
+        style={[styles.input, { fontSize: fontContext?.fontSize || 16 }]}
       />
 
       <TextInput
         placeholder="Enter password"
         value={password}
         onChangeText={(newText) => setPassword(newText)}
-        style={{ fontSize: fontContext?.fontSize || 16 }}
+        style={[styles.input, { fontSize: fontContext?.fontSize || 16 }]}
       />
 
       <TouchableOpacity onPress={handleSubmit}>
@@ -120,6 +110,8 @@ const handleSubmit = async () => {
             color: "white",
             fontSize: fontContext?.fontSize || 16,
             backgroundColor: "black",
+            borderRadius: 15,
+            marginBottom: 15,
           }}
         >
           Submit
@@ -132,6 +124,8 @@ const handleSubmit = async () => {
             color: "white",
             fontSize: fontContext?.fontSize || 16,
             backgroundColor: "black",
+            borderRadius: 15,
+            marginBottom: 15,
           }}
         >
           Register
@@ -165,3 +159,46 @@ const handleSubmit = async () => {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  tabs: {
+    flexDirection: "row",
+  },
+
+  Button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#FFF5E6",
+    borderRadius: 20,
+    marginVertical: 10,
+  },
+
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  lowerButtons: {
+    flexDirection: "row",
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  input: {
+    color: "white",
+    backgroundColor: "blue",
+    borderRadius: 15,
+    marginTop: 15,
+    marginBottom: 15,
+  },
+  backButton: {
+    marginTop: 20,
+    marginLeft: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+});

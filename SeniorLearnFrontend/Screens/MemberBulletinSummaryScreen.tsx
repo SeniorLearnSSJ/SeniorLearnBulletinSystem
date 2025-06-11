@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
+import { FontContext } from "../Context/fontContext";
+import { StyleSheet } from "react-native";
 
 import {
   FlatList,
@@ -21,12 +23,10 @@ import { Trie, TrieNode } from "../Trie";
 import { useAuth } from "../Context/AuthContext";
 import { MemberBulletinCategory } from "../types";
 
-
-
-const categoryEnumMap: Record <string, number> ={
+const categoryEnumMap: Record<string, number> = {
   Interest: MemberBulletinCategory.Interest,
-  Event:  MemberBulletinCategory.Event,
-  Update:  MemberBulletinCategory.Update,
+  Event: MemberBulletinCategory.Event,
+  Update: MemberBulletinCategory.Update,
 };
 
 const API_URL = "http://192.168.1.244:5143/api/bulletins/member";
@@ -39,6 +39,7 @@ type Props = NativeStackScreenProps<
 const MemberBulletinSummary: React.FC<Props> = ({ navigation }) => {
   const context = useContext(ItemContext);
   const loadingOfficial = context?.loadingOfficial;
+  const fontContext = useContext(FontContext);
 
   const tabs = ["Interest", "Event", "Update"];
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
@@ -115,8 +116,8 @@ const MemberBulletinSummary: React.FC<Props> = ({ navigation }) => {
     }, [token])
   );
 
-  const selectedTabIndex = categoryEnumMap [selectedTab];
-    //MemberBulletinCategory[selectedTab as keyof typeof MemberBulletinCategory];
+  const selectedTabIndex = categoryEnumMap[selectedTab];
+  //MemberBulletinCategory[selectedTab as keyof typeof MemberBulletinCategory];
   const filteredBulletins = bulletins.filter(
     (item) =>
       categoryEnumMap[item.category] === selectedTabIndex &&
@@ -147,7 +148,9 @@ const MemberBulletinSummary: React.FC<Props> = ({ navigation }) => {
       onPress={() => navigation.navigate("MemberBulletinDetails", { item })}
     >
       <View>
-        <Text>{item.title}</Text>
+        <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+          {item.title}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -168,6 +171,7 @@ const MemberBulletinSummary: React.FC<Props> = ({ navigation }) => {
         setSelectedTab={setSelectedTab}
       />
       <TextInput
+        style={{ fontSize: fontContext?.fontSize || 16 }}
         placeholder="Search bulletins"
         value={input}
         onChangeText={setInput}
@@ -187,11 +191,82 @@ const MemberBulletinSummary: React.FC<Props> = ({ navigation }) => {
         />
       )}
 
-      {token && (role === "Member" || role === "Administrator") && (
-        <Button title="Add" onPress={() => navigation.navigate("Add")} />
-      )}
+      <View style={styles.bottomButtons}>
+        <TouchableOpacity
+          style={[styles.buttonLeft, { marginTop: 30 }]}
+          onPress={() => navigation.goBack()}
+        >
+          <Text
+            style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+          >
+            Back
+          </Text>
+        </TouchableOpacity>
+
+        {token && (role === "Member" || role === "Administrator") && (
+          <TouchableOpacity
+            style={[styles.buttonRight, { marginTop: 30 }]}
+            onPress={() => navigation.navigate("Add")}
+          >
+            <Text
+              style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+            >
+              Add
+            </Text>
+          </TouchableOpacity>
+
+          // <Button title="Add" onPress={() => navigation.navigate("Add")} />
+        )}
+      </View>
     </View>
   );
 };
 
 export default MemberBulletinSummary;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingBottom: 100,
+    backgroundColor: "#FFF5E6",
+  },
+
+  input: {
+    backgroundColor: "blue",
+    borderRadius: 10,
+    margin: 20,
+  },
+
+  bottomButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 30,
+  },
+
+  buttonLeft: {
+    flex: 1,
+    marginRight: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  buttonRight: {
+    flex: 1,
+    marginLeft: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  backButton: {
+    backgroundColor: "black",
+    borderRadius: 15,
+  },
+});

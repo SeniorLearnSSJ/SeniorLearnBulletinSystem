@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ApiLogin } from "../api";
 
@@ -9,22 +15,30 @@ interface AuthContextType {
   logout: () => void;
   role: "Administrator" | "Member" | null;
   setRole: (role: "Administrator" | "Member" | null) => void;
+  username: string | null;
+  setUsername: (username: string | null) => void;
 }
 
 const STORAGE_KEY = "auth_data";
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<"Administrator" | "Member" | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+
+  //const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getAuthState();
+    
   }, []);
 
   useEffect(() => {
-    setAuthState(token, role);
+    setAuthState(token, role, username);
   }, [token, role]);
 
   const getAuthState = async () => {
@@ -43,6 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           console.warn("Invalid role found in storage, resetting to null.");
           setRole(null);
         }
+        setUsername(data.username || null);
       } else {
         console.warn("No stored auth data found.");
       }
@@ -50,12 +65,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.error("Error retrieving auth state:", err);
       setToken(null);
       setRole(null);
+      setUsername(null);
+      
+
     }
   };
 
-  const setAuthState = async (token: string | null, role: "Administrator" | "Member" | null) => {
+  const setAuthState = async (
+    token: string | null,
+    role: "Administrator" | "Member" | null,
+    username: string | null
+  ) => {
     try {
-      const data = JSON.stringify({ token, role });
+      const data = JSON.stringify({ token, role, username });
       console.log("Saving authentication data:", data);
 
       await AsyncStorage.setItem(STORAGE_KEY, data);
@@ -69,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log(`Attempting login with username: ${username}`);
 
     // Hardcoded Test Credentials
-/*     if (username === "testuser" && password === "testpass") {
+    /*     if (username === "testuser" && password === "testpass") {
       setToken("hardcodedToken");
       setRole("user");
       console.log("Test user logged in successfully.");
@@ -83,10 +105,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (response.success && response.token) {
         setToken(response.token);
 
-        if (response.role === "Administrator" || response.role === "Member")
-        {
-        setRole(response.role);}
-        else {setRole(null);}
+        if (response.role === "Administrator" || response.role === "Member") {
+          setRole(response.role);
+        } else {
+          setRole(null);
+        }
+        setUsername(username);
 
         //console.log(`Login successful. Assigned role: ${assignedRole}`);
 
@@ -112,7 +136,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, setToken, login, logout, role, setRole }}>
+    <AuthContext.Provider
+      value={{ token, setToken, login, logout, role, setRole, username, setUsername }}
+    >
       {children}
     </AuthContext.Provider>
   );

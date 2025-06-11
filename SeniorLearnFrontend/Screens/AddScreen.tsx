@@ -8,7 +8,7 @@ import { ItemContextType } from "../types";
 import { useContext } from "react";
 import { FontContext } from "../Context/fontContext";
 import { useAuth } from "../Context/AuthContext";
-
+import { StyleSheet } from "react-native";
 
 type AddScreenProps = NativeStackScreenProps<RootStackParamList, "Add">;
 
@@ -17,12 +17,13 @@ const API_URL = "http://192.168.1.244:5143/api/bulletins/member";
 export default function AddScreen({ navigation }: AddScreenProps) {
   const context = useContext(ItemContext);
   const { token } = useAuth();
+  const { username } = useAuth();
 
-  if (!context){
-    alert ("Context not avaialble")
+  if (!context) {
+    alert("Context not avaialble");
     return null;
   }
-  const {refreshBulletins} = context;
+  const { refreshBulletins } = context;
 
   //  const [id, setId] = useState('');
   const [title, setTitle] = useState("");
@@ -44,12 +45,12 @@ export default function AddScreen({ navigation }: AddScreenProps) {
     const newBulletin: IItem = {
       id: Date.now().toString(),
       title: title.trim(),
-      category: category.trim(),
-      content: content.trim()
+      category: Number(category),
+      content: content.trim(),
     };
-    
-      console.log("Submitting bulletin:", newBulletin);
-        console.log("Payload JSON:", JSON.stringify(newBulletin));
+
+    console.log("Submitting bulletin:", newBulletin);
+    console.log("Payload JSON:", JSON.stringify(newBulletin));
 
     try {
       const response = await fetch(API_URL, {
@@ -90,9 +91,20 @@ export default function AddScreen({ navigation }: AddScreenProps) {
   };
 
   return (
-    <View>
-      <Text>Add Screen</Text>
+    <View style={styles.container}>
+      <View style={styles.headerRow}>
+        <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+          Add Screen
+        </Text>
 
+        {username && (
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+              ID: {username}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
       {/*  <TextInput
         
         placeholder="Enter id"
@@ -111,33 +123,99 @@ export default function AddScreen({ navigation }: AddScreenProps) {
 
  */}
 
-      <TouchableOpacity onPress={() => handleTypeSelect("Interest")}>
-        <Text style={{ fontSize: fontContext?.fontSize || 16 }}> 1 </Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TouchableOpacity
+          style={styles.event}
+          onPress={() => handleTypeSelect("Interest")}
+        >
+          <Text
+            style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+          >
+            {" "}
+            Interest{" "}
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleTypeSelect("Event")}>
-        <Text style={{ fontSize: fontContext?.fontSize || 16 }}> 2 </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.event}
+          onPress={() => handleTypeSelect("Event")}
+        >
+          <Text
+            style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+          >
+            {" "}
+            Update{" "}
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleTypeSelect("Update")}>
-        <Text style={{ fontSize: fontContext?.fontSize || 16 }}> 3 </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.event}
+          onPress={() => handleTypeSelect("Update")}
+        >
+          <Text
+            style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+          >
+            {" "}
+            Event{" "}
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <TextInput
         placeholder="Enter title"
+        style={[
+          { fontSize: fontContext?.fontSize || 16, color: "black" },
+          styles.input,
+        ]}
         onChangeText={(newText) => setTitle(newText)}
       />
-      
+
       <TextInput
         placeholder="Enter content"
+        style={[
+          { fontSize: fontContext?.fontSize || 16, color: "black" },
+          styles.input,
+        ]}
         onChangeText={(newText) => setContent(newText)}
       />
 
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text style={{ fontSize: fontContext?.fontSize || 16 }}> Submit </Text>
-      </TouchableOpacity>
+      <View style={styles.bottomButtons}>
+        <TouchableOpacity
+          style={styles.buttonLeft}
+          onPress={() => navigation.goBack()}
+        >
+          <Text
+            style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+          >
+            Back
+          </Text>
+        </TouchableOpacity>
 
-      {/*       <Button title="1" onPress={() => handleTypeSelect("1")} />
+        <TouchableOpacity onPress={handleSubmit} style={styles.buttonRight}>
+          <Text
+            style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+          >
+            {" "}
+            Submit{" "}
+          </Text>
+        </TouchableOpacity>
+
+        {/*         <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text
+            style={{
+              fontSize: fontContext?.fontSize || 16,
+              textAlign: "center",
+              color: "white",
+            }}
+          >
+            Back
+          </Text>
+        </TouchableOpacity> */}
+
+        {/*       <Button title="1" onPress={() => handleTypeSelect("1")} />
 
       <Button title="2" onPress={() => handleTypeSelect("2")} />
 
@@ -149,6 +227,60 @@ export default function AddScreen({ navigation }: AddScreenProps) {
       />
 
       <Button title="Submit" onPress={handleSubmit} /> */}
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingBottom: 100,
+    backgroundColor: "#FFF5E6",
+  },
+
+  input: {
+    backgroundColor: "blue",
+    borderRadius: 10,
+    margin: 20,
+  },
+
+  bottomButtons: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    right: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    //backgroundColor: "black",
+  },
+
+  buttonLeft: {
+    flex: 1,
+    marginRight: 10,
+    borderRadius: 10,
+    backgroundColor: "black"
+  },
+
+  buttonRight: {
+    flex: 1,
+    marginLeft: 10,
+    borderRadius: 10,
+    backgroundColor: "black"
+  },
+
+  event: {
+    backgroundColor: "pink",
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  backButton: {
+    backgroundColor: "black",
+    borderRadius: 15,
+  },
+});

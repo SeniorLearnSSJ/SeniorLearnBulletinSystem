@@ -14,6 +14,8 @@ import { ItemContext } from "../Context/context";
 import TabMenu from "../tabs";
 import { IItem, ItemContextType } from "../types";
 import { useAuth } from "../Context/AuthContext";
+import { FontContext } from "../Context/fontContext";
+import { StyleSheet } from "react-native";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -29,6 +31,7 @@ const OfficialBulletinsSummary: React.FC<Props> = ({ navigation }) => {
     IOfficialBulletin[]
   >([]);
   const [loading, setLoading] = useState<Boolean>(true);
+  const fontContext = useContext(FontContext);
 
   useEffect(() => {
     const getItems = async () => {
@@ -126,16 +129,21 @@ const OfficialBulletinsSummary: React.FC<Props> = ({ navigation }) => {
 
   const renderItem = ({ item }: { item: IOfficialBulletin }) => (
     <TouchableOpacity
+      style={styles.bulletinButton}
       onPress={() => navigation.navigate("OfficialBulletinsDetails", { item })}
     >
-      <View>
-        <Text>{item.title}</Text>
-      </View>
+      <Text
+        style={[styles.bulletinText, { fontSize: fontContext?.fontSize ?? 16 }]}
+      >
+        {item.title}
+      </Text>
     </TouchableOpacity>
   );
   return (
     <View style={{ flex: 1 }}>
-      <Text>Today's bulletins</Text>
+      <Text style={{ fontSize: fontContext?.fontSize || 16, color: "black" }}>
+        Today's bulletins
+      </Text>
       <FlatList
         data={todayBulletins}
         renderItem={renderItem}
@@ -143,20 +151,48 @@ const OfficialBulletinsSummary: React.FC<Props> = ({ navigation }) => {
         ListEmptyComponent={<Text>No bulletins from today</Text>}
       />
 
-      <Text>Earlier bulletins</Text>
+      <Text style={{ fontSize: fontContext?.fontSize || 16, color: "black" }}>
+        Earlier bulletins
+      </Text>
       <FlatList
+        style={styles.list}
         data={earlierBulletins}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<Text>No bulletins</Text>}
       />
 
-      {token && role === "Administrator" && (
+      <View style={styles.bottomButtons}>
+        <TouchableOpacity
+          style={[styles.buttonLeft, { marginTop: 30 }]}
+          onPress={() => navigation.goBack()}
+        >
+          <Text
+            style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+          >
+            Back
+          </Text>
+        </TouchableOpacity>
+
+        {token && role === "Administrator" && (
+          <TouchableOpacity
+            style={[styles.buttonLeft, { marginTop: 30 }]}
+            onPress={() => navigation.navigate("AddOfficial")}
+          >
+            <Text
+              style={{ fontSize: fontContext?.fontSize || 16, color: "white" }}
+            >
+              Add
+            </Text>
+          </TouchableOpacity>
+
+          /* 
         <Button
           title="Add"
           onPress={() => navigation.navigate("AddOfficial")}
-        />
-      )}
+        /> */
+        )}
+      </View>
     </View>
   );
 };
@@ -202,3 +238,62 @@ keyExtractor = {(item) => item.id}/>
 
 
 export default OfficialBulletinsSummary; */
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingBottom: 100,
+    backgroundColor: "#FFF5E6",
+  },
+
+  list: {},
+
+  input: {
+    backgroundColor: "blue",
+    borderRadius: 10,
+    margin: 20,
+  },
+
+  bottomButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 30,
+  },
+
+  buttonLeft: {
+    flex: 1,
+    marginRight: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  buttonRight: {
+    flex: 1,
+    marginLeft: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  backButton: {
+    backgroundColor: "black",
+    borderRadius: 15,
+  },
+  buttonDisabled: {
+    backgroundColor: "grey",
+  },
+  bulletinButton: {
+    backgroundColor: "blue",
+    borderRadius: 15,
+    marginBottom: 10,
+  },
+  bulletinText: {
+    color: "white",
+  },
+});
