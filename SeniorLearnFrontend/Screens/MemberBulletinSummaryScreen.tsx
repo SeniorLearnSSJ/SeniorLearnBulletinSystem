@@ -19,8 +19,17 @@ import TabMenu from "../tabs";
 import { IItem, ItemContextType } from "../types";
 import { Trie, TrieNode } from "../Trie";
 import { useAuth } from "../Context/AuthContext";
+import { MemberBulletinCategory } from "../types";
 
-const API_URL = "http://172.19.159.72:5143/api/bulletins/member";
+
+
+const categoryEnumMap: Record <string, number> ={
+  Interest: MemberBulletinCategory.Interest,
+  Event:  MemberBulletinCategory.Event,
+  Update:  MemberBulletinCategory.Update,
+};
+
+const API_URL = "http://192.168.1.244:5143/api/bulletins/member";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -43,11 +52,10 @@ const MemberBulletinSummary: React.FC<Props> = ({ navigation }) => {
 
   //const { bulletins, loadingMember } = context;
 
-  // const [bulletins, setBulletins] = useState<IItem[]>([]);
+  const [bulletins, setBulletins] = useState<IItem[]>([]);
 
-
-const { bulletins, loadingMember } = context;
-
+  //const { bulletins, loadingMember } = context;
+  const { loadingMember } = context;
 
   // const [loading, setLoading] = useState(true);
 
@@ -70,15 +78,15 @@ const { bulletins, loadingMember } = context;
     }
   }, [input]);
 
-  /* useFocusEffect(
+  useFocusEffect(
     useCallback(() => {
       console.log("Token at fetch time:", token);
       if (!token) {
-        setLoading(false); // stop loading if no token
+        //setLoading(false); // stop loading if no token
         return; // skip fetch if token is not available yet
       }
 
-      setLoading(true);
+      //setLoading(true);
 
       const fetchData = async (): Promise<void> => {
         console.log("Token:", token);
@@ -99,17 +107,19 @@ const { bulletins, loadingMember } = context;
         } catch (error) {
           console.error("Error fetching data:", error);
         } finally {
-          setLoading(false);
+          //setLoading(false);
         }
       };
 
       fetchData();
     }, [token])
-  ); */
+  );
 
+  const selectedTabIndex = categoryEnumMap [selectedTab];
+    //MemberBulletinCategory[selectedTab as keyof typeof MemberBulletinCategory];
   const filteredBulletins = bulletins.filter(
     (item) =>
-      item.category === selectedTab &&
+      categoryEnumMap[item.category] === selectedTabIndex &&
       (input.length === 0 ||
         item.title.toLowerCase().includes(input.toLowerCase()))
   );

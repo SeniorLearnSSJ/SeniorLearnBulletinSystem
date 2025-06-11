@@ -9,13 +9,13 @@ export type RootStackParamList = {
   Register: undefined;
   Edit: {item: IItem};
   MemberBulletinDetails: {
-    item: { id: string; title: string; category: string, content: string };
+    item: IItem ;
   };
   OfficialBulletinsSummary: undefined;
   Add: undefined;
   OfficialBulletinsDetails: {
-    item: IOfficialBulletin
-  }
+    item: IOfficialBulletin;
+  };
   AddOfficial: undefined;
   EditOfficial:  {
     item: IOfficialBulletin};
@@ -30,7 +30,7 @@ export interface IItem {
   createdByUsername?: string;
   createdAt?: string;
   updatedAt?: string;
-  category: string;
+  category: number;
   content: string;
  
 }
@@ -88,3 +88,9 @@ type LoginResult = {
   role: "admin" | "user" | null;
   setRole: (role: "admin" | "user" | null) => void;
 } */
+
+  export enum MemberBulletinCategory {
+  Interest = 0,
+  Event = 1,
+  Update = 2,
+}

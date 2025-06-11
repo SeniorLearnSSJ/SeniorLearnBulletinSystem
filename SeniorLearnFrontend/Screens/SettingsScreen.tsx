@@ -35,7 +35,7 @@ type SettingsScreenProps = NativeStackScreenProps<
   }
  */
 
-const Settings_API_URL = "http://172.19.159.72:5143/api/profile/settings";
+const Settings_API_URL = "http://192.168.1.244:5143/api/profile/settings";
 
 export default function SettingsScreen({ navigation }: SettingsScreenProps) {
   const { logout } = useAuth();

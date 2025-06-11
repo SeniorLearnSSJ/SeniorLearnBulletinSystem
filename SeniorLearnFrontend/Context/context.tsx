@@ -9,9 +9,9 @@ export const ItemContext = React.createContext<ItemContextType | null>(null);
 
 const Provider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [bulletins, setBulletins] = React.useState<IItem[]>([
-    { id: "1", title: "First Item", category: "1", content: "Hey!" },
+   /*  { id: "1", title: "First Item", category: "1", content: "Hey!" },
     { id: "2", title: "Second Item", category: "2", content: "Heya!" },
-    { id: "3", title: "Third Item", category: "3", content: "Heyhey!" },
+    { id: "3", title: "Third Item", category: "3", content: "Heyhey!" }, */
   ]);
 
 
@@ -49,9 +49,9 @@ saveFontSize();
   const [officialBulletins, setOfficialBulletins] = React.useState<
     IOfficialBulletin[]
   >([
-    { id: "1", title: "First Item", createdAt: "2025-01-01", content: "Hey!" },
+    /* { id: "1", title: "First Item", createdAt: "2025-01-01", content: "Hey!" },
     { id: "2", title: "Second Item", createdAt: "2025-01-02", content: "Heya!" },
-    { id: "3", title: "Third Item", createdAt: "2025-01-03", content: "Hi!" },
+    { id: "3", title: "Third Item", createdAt: "2025-01-03", content: "Hi!" }, */
   ]);
 
   const [officialBulletinList, setOfficialBulletinList] = React.useState(
@@ -71,7 +71,7 @@ saveFontSize();
         }
         // Fetch fresh data from API
         const response = await fetch(
-          "http://172.19.159.72:5143/api/bulletins/member"
+          "http://192.168.1.244:5143/api/bulletins/member"
         );
         const json = await response.json();
         setBulletins(json.data ?? []);
@@ -90,7 +90,7 @@ saveFontSize();
       async function fetchMemberBulletins() {
         setLoadingMember (true);
         try {
-          const response = await fetch("http://172.19.159.72:5143/api/bulletins/member"
+          const response = await fetch("http://192.168.1.244:5143/api/bulletins/member"
 );
           const json = await response.json();
           const fetchedMemberBulletins: IItem[] = json.data ?? [];
@@ -111,7 +111,7 @@ saveFontSize();
       async function fetchOfficialBulletins() {
         setLoadingOfficial(true)
         try {
-          const response = await fetch("http://172.19.159.72:5143/api/bulletins/official");
+          const response = await fetch("http://192.168.1.244:5143/api/bulletins/official");
           const json = await response.json();
           const fetchedOfficialBulletins: IOfficialBulletin[] = json.data ?? [];
           setOfficialBulletins(fetchedOfficialBulletins); 
@@ -202,7 +202,7 @@ const mapped = officialBulletins.map(b=>({
 const refreshBulletins = async () => {
   setLoadingMember(true);
   try {
-    const response = await fetch("http://172.19.159.72:5143/api/bulletins/member");
+    const response = await fetch("http://192.168.1.244:5143/api/bulletins/member");
     const json = await response.json();
     setBulletins(json.data ?? []);
   } catch (error) {

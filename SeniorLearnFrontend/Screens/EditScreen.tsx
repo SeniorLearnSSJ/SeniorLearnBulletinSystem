@@ -5,12 +5,13 @@ import { RootStackParamList } from "../types";
 import { ItemContext } from "../Context/context";
 import { ItemContextType, IItem } from "../types";
 import { useContext, useState } from "react";
+import { MemberBulletinCategory } from "../types";
 
 import { useAuth } from "../Context/AuthContext";
 
 type EditScreenProps = NativeStackScreenProps<RootStackParamList, "Edit">;
 
-const API_BASE = "http://172.19.159.72:5143/api/bulletins/member";
+const API_BASE = "http://192.168.1.244:5143/api/bulletins/member";
 
 export default function EditScreen({ navigation, route }: EditScreenProps) {
   const context = useContext(ItemContext);
@@ -23,10 +24,16 @@ const { token } = useAuth();
 
   const { item } = route.params;
   const [title, setTitle] = useState(item?.title ?? "");
-  const [category, setCategory] = useState(item?.category ?? "");
-
+  const [category, setCategory] = useState<number>(() =>{
+    if (typeof item?.category === "string"){
+      return MemberBulletinCategory [item.category as keyof typeof MemberBulletinCategory]
+    }
+    return item?.category??0;
+  });
+  const [content, setContent] = useState(item.content ?? "");
+ 
   const handleSubmit = async () => {
-    if (!title.trim() || !category.trim()) {
+    if (!title.trim() || category==null || category == undefined ||!content.trim()) {
       alert("Fill all fields");
       return;
     }
@@ -35,7 +42,8 @@ const { token } = useAuth();
     const updatedBulletin = {
       id: item?.id ?? Date.now().toString(),
       title: title.trim(),
-      category: category.trim(),
+      category: category,
+      content: content.trim()
     };
 
     try {
@@ -55,7 +63,7 @@ const { token } = useAuth();
       const data = await response.json();
       console.log("Updated item:", data);
 
-      await saveBulletins(updatedBulletin);
+      saveBulletins(updatedBulletin);
 
       navigation.navigate("MemberBulletinSummary");
     } catch (error) {
@@ -88,7 +96,7 @@ const { token } = useAuth();
     //navigation.navigate("MemberBulletinSummary");
   };
 
-  const handleTypeSelect = (category: string) => {
+  const handleTypeSelect = (category: number) => {
     setCategory(category);
   };
 
@@ -101,17 +109,20 @@ const { token } = useAuth();
       {/* 
       <Text>{item.type}</Text> */}
 
-      <Button title="1" onPress={() => handleTypeSelect("1")} />
+      <Button title="Interest" onPress={() => handleTypeSelect(0)} />
 
-      <Button title="2" onPress={() => handleTypeSelect("2")} />
+      <Button title="Event" onPress={() => handleTypeSelect(1)} />
 
-      <Button title="3" onPress={() => handleTypeSelect("3")} />
+      <Button title="Update" onPress={() => handleTypeSelect(2)} />
 
       <Text>Title</Text>
 
       {/* <TextInput value={type} onChangeText={setType}></TextInput> */}
 
       <TextInput value={title} onChangeText={setTitle}></TextInput>
+
+
+           <TextInput value={content} onChangeText={setContent}></TextInput>
 
       <Button
         title="Submit"

@@ -18,7 +18,7 @@ import { FontContext } from "../Context/fontContext";
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
 
-const API_URL = "http://172.19.159.72:5143/api/auth/sign-in";
+const API_URL = "http://192.168.1.244:5143/api/auth/sign-in";
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
   const { login } = useAuth();

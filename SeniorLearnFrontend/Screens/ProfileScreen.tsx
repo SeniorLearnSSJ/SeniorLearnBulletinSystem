@@ -18,7 +18,7 @@ import { FontContext } from "../Context/fontContext";
 
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
-const API_URL = "http://172.19.159.72:5143/api/profile";
+const API_URL = "http://192.168.1.244:5143/api/profile";
 
 export default function ProfileScreen({ navigation }: ProfileScreenProps) {
   const { login } = useAuth();
@@ -33,6 +33,19 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
     return <Text>Loading...</Text>;
   }
 
+  const [bulletins, setBulletins] = useState<
+    {
+      id: string;
+      title: string;
+      content: string;
+      createdById: string;
+      createdByUsername: string;
+      createdAt: string;
+      updatedAt: string;
+      category: string;
+    }[]
+  >([]);
+
   const [username, setUsername] = useState("");
   //const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -40,7 +53,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [membershipDate, setMembershipDate] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { token, setToken } = authContext;
 
@@ -96,13 +109,18 @@ setUsername (data.username);
         });
         if (!response.ok) throw new Error(`${response.status}`);
 
-        const data = await response.json();
-        setUsername(data.username);
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setEmail(data.email);
-        setRole(data.role);
-        setMembershipDate(data.membershipDate);
+        //const data = await response.json();
+        //console.log("Fetched profile data:", responseJson);
+
+        const responseJson = await response.json();
+        const userData = responseJson.data;
+        setUsername(userData.username);
+        setFirstName(userData.firstName);
+        setLastName(userData.lastName);
+        setEmail(userData.email);
+        setRole(userData.role);
+        setMembershipDate(userData.membershipDate);
+        setBulletins(userData.myBulletins ?? []);
       } catch (error) {
         console.error(error);
       } finally {
@@ -111,7 +129,7 @@ setUsername (data.username);
     };
 
     fetchProfile();
-  }, []);
+  }, [token]);
 
   const handleSubmit = async () => {
     // Assuming you have form fields like 'username', 'email', etc.
@@ -139,8 +157,8 @@ setUsername (data.username);
           firstName,
           lastName,
           email,
-          role,
-          membershipDate,
+          //role,
+          // membershipDate,
         }),
       });
 
@@ -204,12 +222,17 @@ setUsername (data.username);
         Login Screen
       </Text>
 
-      <TextInput
-        placeholder="Enter username"
+      {/*  <TextInput
+        //placeholder="Enter username"
         value={username}
-        onChangeText={(newText) => setUsername(newText)}
+        editable = {false}
+       // onChangeText={(newText) => setUsername(newText)}
         style={{ fontSize: fontContext?.fontSize || 16 }}
-      />
+      /> */}
+
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        Username: {username}
+      </Text>
 
       <TextInput
         placeholder="Enter first name"
@@ -232,19 +255,61 @@ setUsername (data.username);
         style={{ fontSize: fontContext?.fontSize || 16 }}
       />
 
-      <TextInput
-        placeholder="Enter role"
-        value={role}
-        onChangeText={(newText) => setRole(newText)}
-        style={{ fontSize: fontContext?.fontSize || 16 }}
-      />
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        Membership date: {membershipDate}
+      </Text>
 
+      {/*       <TextInput
+       // placeholder="Enter role"
+        value={role}
+        editable = {false}
+        //onChangeText={(newText) => setRole(newText)}
+        style={{ fontSize: fontContext?.fontSize || 16 }}
+      /> */}
+
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        Role: {role}
+      </Text>
+
+      <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        Your bulletins
+      </Text>
+
+      {bulletins.length === 0 ? (
+        <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+          No bulletins yet
+        </Text>
+      ) : (
+        bulletins.map((bulletin) => (
+          <View key={bulletin.id}>
+            <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+              {bulletin.title}
+            </Text>
+            <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+              {bulletin.category}
+            </Text>
+            <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+              {bulletin.content}
+            </Text>
+            <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+              {new Date(bulletin.createdAt).toLocaleDateString()}
+            </Text>
+          </View>
+        ))
+      )}
+
+      {/* 
       <TextInput
-        placeholder="Enter membership date"
+        //placeholder="Enter membership date"
         value={membershipDate}
+        editable = {false}
         onChangeText={(newText) => setMembershipDate(newText)}
         style={{ fontSize: fontContext?.fontSize || 16 }}
-      />
+      /> */}
+
+      {/*    <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
+        Membership date: {membershipDate}
+      </Text> */}
 
       <TouchableOpacity onPress={handleSubmit}>
         <Text

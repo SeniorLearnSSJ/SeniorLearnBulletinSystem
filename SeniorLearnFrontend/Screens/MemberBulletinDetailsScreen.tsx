@@ -7,7 +7,7 @@ import { ItemContextType, IItem } from "../types";
 import { useContext } from "react";
 import { useAuth } from "../Context/AuthContext";
 
-const API_URL = "http://172.19.159.72:5143/api/bulletins/member";
+const API_URL = "http://192.168.1.244:5143/api/bulletins/member";
 
 type MemberBulletinDetailsScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -65,6 +65,7 @@ export default function MemberBulletinDetailsScreen({
       <Text>{item.category}</Text>
       <Text>{item.id}</Text>
       <Text> {item.title}</Text>
+      <Text> {item.content} </Text>
 
       {token && (role === "Member" || role === "Administrator") && (
         <Button
