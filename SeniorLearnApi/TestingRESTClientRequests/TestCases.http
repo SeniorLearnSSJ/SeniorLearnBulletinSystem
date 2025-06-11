@@ -1,0 +1,322 @@
+
+#References
+@SeniorLearnApi_HostAddress = http://localhost:5143
+
+#Test Case 1: Member Login
+POST {{SeniorLearnApi_HostAddress}}/api/auth/sign-in
+Content-Type: application/json
+Accept: application/json
+
+{
+    "Username": "AnonUser123",
+    "Password": "user123"
+}
+
+###Pass
+
+#Test Case 2: Admin Login
+
+POST {{SeniorLearnApi_HostAddress}}/api/auth/sign-in
+Content-Type: application/json
+Accept: application/json
+
+{
+    "Username": "Admin",
+    "Password": "user123"
+}
+
+###Pass
+
+#Test Case 3: Invalid Login
+
+POST {{SeniorLearnApi_HostAddress}}/api/auth/sign-in
+Content-Type: application/json
+Accept: application/json
+
+
+###Pass
+
+#Test Case 4: Get All Member Bulletin List
+GET {{SeniorLearnApi_HostAddress}}/api/bulletins/member
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk2ZTA0NTQ1NTE2ODZiYTIzMTMxYyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY0NjU4NiwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.ojz25R0JfC1X9gsPZ0oIJscN_gjCeQ4ADVTgpRlqY94
+
+{
+    "category": "Event"
+}
+
+
+//Notes Our method says it can take a userId parameter but for our purposes we dont need userId
+
+###FAIL
+
+#Test Case 5: Invalid GET Member Bulletin List
+
+GET {{SeniorLearnApi_HostAddress}}/api/bulletins/member
+Content-Type: application/json
+Accept: application/json
+
+###PASS
+
+
+#Test Case 6: Get Member Bulletin Detail
+
+GET {{SeniorLearnApi_HostAddress}}/api/bulletins/member/6849173fe14ff983280e94da
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDkxNzNmZTE0ZmY5ODMyODBlOTRkMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTYyODc1OSwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.iI7GhYpx3onfCsU4RVPLd_MKo8fSCEV7OgNJAzqWP-A
+
+
+###PASS
+
+
+#Test Case 7: Post Bulletin- Interest Category
+POST {{SeniorLearnApi_HostAddress}}/api/bulletins/member
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDkxNzNmZTE0ZmY5ODMyODBlOTRkMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY0Mjk4OCwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.qnhAII2NLt_W6DbCz5OELtkR1uffNkI44FEu1ooV-r8
+
+{
+    "memberName":"AnonUser123",
+    "memberId":"6849173fe14ff983280e94d3",
+    "Title":"TestCase 7",
+    "Category":"Interest",
+    "Content": "Testing lots of test cases to go"
+
+}
+
+###PASS
+
+# Test Case 8: Post Bulletin- Event Category
+POST {{SeniorLearnApi_HostAddress}}/api/bulletins/member
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDkxNzNmZTE0ZmY5ODMyODBlOTRkMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY0Mjk4OCwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.qnhAII2NLt_W6DbCz5OELtkR1uffNkI44FEu1ooV-r8
+
+{
+    "memberName":"AnonUser123",
+    "memberId":"6849173fe14ff983280e94d3",
+    "Title":"TestCase 8 Title",
+    "Category":"Event",
+    "Content": "TestCase 8 Content"
+
+}
+
+###
+
+# Test Case 9: Post Bulletin- False Category
+POST {{SeniorLearnApi_HostAddress}}/api/bulletins/member
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDkxNzNmZTE0ZmY5ODMyODBlOTRkMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY0Mjk4OCwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.qnhAII2NLt_W6DbCz5OELtkR1uffNkI44FEu1ooV-r8
+
+{
+    "memberName":"AnonUser123",
+    "memberId":"6849173fe14ff983280e94d3",
+    "Title":"TestCase 9 Title",
+    "Category":"Made Up Category",
+    "Content": "Test case 9 Content"
+
+}
+
+###
+
+#Test Case 10: Update Existing MemberBulletin (Change title + Content)
+PUT {{SeniorLearnApi_HostAddress}}/api/bulletins/member/6849173fe14ff983280e94da
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDkxNzNmZTE0ZmY5ODMyODBlOTRkMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY0Mjk4OCwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.qnhAII2NLt_W6DbCz5OELtkR1uffNkI44FEu1ooV-r8
+
+{
+    "memberId":"6849173fe14ff983280e94d3",
+    "Title":"TestCase 10 New IceCream Party",
+    "Category":"Update",
+    "Content": "Test case 10 New Ice Cr68497d34713216f43995c3d6eam Party Content"
+}
+
+###
+
+#Test Case 11: Delete existing Member Bulletin
+DELETE {{SeniorLearnApi_HostAddress}}/api/bulletins/member/684970c491290a05afea663f
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3MGMzOTEyOTBhMDVhZmVhNjYzOCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY0NzE4MiwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.3yx6O2xBMWfNbp2Uc11cdyTp8823j5Dsy--akQafEHA
+
+{
+     "currentUserId": "684970c391290a05afea6638"
+}
+
+
+###
+#TestCase 12: Access Official Bulletin List
+
+GET {{SeniorLearnApi_HostAddress}}/api/bulletins/official
+
+Accept: application/json
+
+###
+#TestCase 13:POST Official Bulletin
+POST {{SeniorLearnApi_HostAddress}}/api/bulletins/official
+Content-Type:application/json
+Accept:application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3MGMzOTEyOTBhMDVhZmVhNjYzNyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJleHAiOjE3NDk2NDg0MzgsImlzcyI6IlNlbmlvckxlYXJuQXBpIiwiYXVkIjoiU2VuaW9yTGVhcm4uVXNlcnMifQ.dNntvZPoT-lcqFo-x7SNlRJHPZNjIWleZrw5ljqUQLo
+
+{
+    "adminId": "684970c391290a05afea6637",
+    "adminName":"Admin",
+    "Title": "TestCase13 POST by Admin",
+    "Content":"TestCase 13 POST Content by Admin"
+
+}
+
+###
+#TestCase 14:POST Official Bulletin with MemberId
+POST {{SeniorLearnApi_HostAddress}}/api/bulletins/official
+Content-Type:application/json
+Accept:application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3ZDM0NzEzMjE2ZjQzOTk1YzNjNCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY1NTk3OCwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.qGerbiOBwyCSiQIWIOAzVAc5e1oUdixlFQe82FLctIY
+
+{
+
+    "Title": "TestCase14 POST by Member",
+    "Content":"TestCase 14 POST Content by Member"
+}
+
+### FAIL: Gets userId and Username and checks it across User collection but does verify for admin
+#TestCase 15: Update Official Bulletin
+PUT {{SeniorLearnApi_HostAddress}}/api/bulletins/official/68497d34713216f43995c3d6
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3ZDM0NzEzMjE2ZjQzOTk1YzNjMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJleHAiOjE3NDk2NTEzNDgsImlzcyI6IlNlbmlvckxlYXJuQXBpIiwiYXVkIjoiU2VuaW9yTGVhcm4uVXNlcnMifQ.YeMs8KNf9vxtUt737tys_u5gnAv-JF2VWZ8ki-HKKC0
+
+{
+    "adminId": "68497d34713216f43995c3c3",
+    "adminName":"Admin",
+    "Title": "TestCase15 Update by Admin",
+    "Content":"TestCase 15 Update Content by Admin"
+}
+
+###PASS
+
+#TestCase 16: Update Official Bulletin with MemberId
+PUT {{SeniorLearnApi_HostAddress}}/api/bulletins/official/68497d34713216f43995c3d4
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3ZDM0NzEzMjE2ZjQzOTk1YzNjNCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY1MTg0MiwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.LoGCqW0BRumpkthrZ1D5dJDGGjA86I3wV0W_nGRaFUw
+
+{
+    "adminId": "68497d34713216f43995c3c4",
+    "adminName":"AnonUser123",
+    "Title": "TestCase 16 Update by Member",
+    "Content":"TestCase 16 Update Content by Member"
+}
+
+###PASS
+
+#TestCase17: Delete Official Bulletin
+DELETE {{SeniorLearnApi_HostAddress}}/api/bulletins/official/68497d34713216f43995c3d4
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3ZDM0NzEzMjE2ZjQzOTk1YzNjMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJleHAiOjE3NDk2NTI1ODIsImlzcyI6IlNlbmlvckxlYXJuQXBpIiwiYXVkIjoiU2VuaW9yTGVhcm4uVXNlcnMifQ.WLP3FBvRsu7AGHk7vU1dW1jEAke-G4GxmIF64KJvzAM
+
+{
+    "adminId": "68497d34713216f43995c3c3",
+    "adminName":"Admin",
+}
+
+###PASS
+
+#TestCase18: Delete Official Bulletin with MemberId
+DELETE {{SeniorLearnApi_HostAddress}}/api/bulletins/official/68497d34713216f43995c3d5
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3ZDM0NzEzMjE2ZjQzOTk1YzNjNCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY1MzM1MSwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.OJ3k8weV-b7qC6MvXOLgd_8wjjyBiSsEjsJe3_ibSQM
+
+{
+    "adminId": "68497d34713216f43995c3c4",
+    "adminName":"AnonUser123",
+}
+
+###PASS
+
+#Test Case 19: GET User Profile with just Bearer Token
+GET {{SeniorLearnApi_HostAddress}}/api/profile
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3ZDM0NzEzMjE2ZjQzOTk1YzNjNCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY1NDAxNCwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.oMxjxewizyU374EkoyuqlCwBrvCCJqgCzr7iPZHzgLk
+
+{
+
+}
+
+###
+
+#Test Case 20: Update User Profile with just Bearer Token
+PUT {{SeniorLearnApi_HostAddress}}/api/profile
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk3ZDM0NzEzMjE2ZjQzOTk1YzNjNCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY1NzEyMiwiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.k6AgOrxPS4bRYkmnHMC4zQxYWAVUjtnObI4ejmRjdRQ
+
+{
+    "FirstName": "Steven",
+    "LastName": "Leong",
+    "Email": "steven.siu.leong@gmail.com"
+
+}
+###
+
+#Test Case 21: GET User Settings
+GET {{SeniorLearnApi_HostAddress}}/api/profile/settings
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk5YmEwODIwMWU3YmJlYTRhNzBhNSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY1ODE1MywiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.bdE8PK_6WwhMyWJAnZQ9D_LzNKNYJlSOhxzaEC92CqA
+
+###
+
+#Test Case 22: Update User Settings
+PUT {{SeniorLearnApi_HostAddress}}/api/profile/settings
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDk5YmEwODIwMWU3YmJlYTRhNzBhNSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbm9uVXNlcjEyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY1ODE1MywiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.bdE8PK_6WwhMyWJAnZQ9D_LzNKNYJlSOhxzaEC92CqA
+
+{
+    "FontSize": "24",
+    "DarkMode": true,
+    "EnableNotifications": false
+}
+
+###
+
+#Test Case 23:Registration
+POST {{SeniorLearnApi_HostAddress}}/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+    "Username": "UltraSteven",
+    "Password": "HelloKitty",
+    "FirstName": "Steven The Great",
+    "LastName": "Forgot his Last Name",
+    "Email": "stevennotsogreat@gmail.com"
+}
+
+###
+
+#Test Case 24: Check User Settings of Newly added User
+GET {{SeniorLearnApi_HostAddress}}/api/profile/settings
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY4NDlhM2UyODIwMWU3YmJlYTRhNzBiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJVbHRyYVN0ZXZlbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsImV4cCI6MTc0OTY2MDE0NywiaXNzIjoiU2VuaW9yTGVhcm5BcGkiLCJhdWQiOiJTZW5pb3JMZWFybi5Vc2VycyJ9.VMLkZaukUGHFYGIJgQP3ZZ1UF7Roq3zgOH8MmaWQ1QE
+
+###
+#Test Case 25: Reusing Username
+POST {{SeniorLearnApi_HostAddress}}/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+    "Username": "AnonUser123",
+    "Password": "HelloKitty",
+    "FirstName": "Steven The Great",
+    "LastName": "Forgot his Last Name",
+    "Email": "supermanNikolaJokic@gmail.com"
+}
