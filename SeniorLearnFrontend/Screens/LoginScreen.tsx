@@ -19,7 +19,7 @@ import { StyleSheet } from "react-native";
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
 
-const API_URL = "http://192.168.1.244:5143/api/auth/sign-in";
+const API_URL = "http://172.19.159.72:5143/api/auth/sign-in";
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
   const { login } = useAuth();
@@ -104,35 +104,40 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         style={[styles.input, { fontSize: fontContext?.fontSize || 16 }]}
       />
 
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text
-          style={{
-            color: "white",
-            fontSize: fontContext?.fontSize || 16,
-            backgroundColor: "black",
-            borderRadius: 15,
-            marginBottom: 15,
-          }}
-        >
-          Submit
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.lowerButtons}>
+        <TouchableOpacity style={styles.buttonLeft} onPress={handleSubmit}>
+          <Text
+            style={{
+              color: "white",
+              fontSize: fontContext?.fontSize || 16,
+              backgroundColor: "black",
+              borderRadius: 15,
+              marginBottom: 15,
+            }}
+          >
+            Submit
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text
-          style={{
-            color: "white",
-            fontSize: fontContext?.fontSize || 16,
-            backgroundColor: "black",
-            borderRadius: 15,
-            marginBottom: 15,
-          }}
+        <TouchableOpacity
+          style={styles.buttonRight}
+          onPress={() => navigation.navigate("Register")}
         >
-          Register
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={{
+              color: "white",
+              fontSize: fontContext?.fontSize || 16,
+              backgroundColor: "black",
+              borderRadius: 15,
+              marginBottom: 15,
+            }}
+          >
+            Register
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
+      {/*       <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
         <Text
           style={{
             color: "white",
@@ -142,7 +147,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         >
           Settings
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/*       <Button title="Submit" onPress={handleSubmit} />
 
@@ -184,6 +189,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   lowerButtons: {
+    flex: 1,
     flexDirection: "row",
     marginLeft: 15,
     marginRight: 15,
@@ -198,6 +204,24 @@ const styles = StyleSheet.create({
   backButton: {
     marginTop: 20,
     marginLeft: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  buttonLeft: {
+    flex: 1,
+    marginRight: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  buttonRight: {
+    flex: 1,
+    marginLeft: 10,
+    marginTop: 10,
+    marginBottom: 10,
     borderRadius: 10,
     backgroundColor: "black",
   },

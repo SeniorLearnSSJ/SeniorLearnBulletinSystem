@@ -6,6 +6,7 @@ import {
   Button,
   Alert,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
@@ -15,10 +16,11 @@ import { useContext } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { ItemContext } from "../Context/context";
 import { FontContext } from "../Context/fontContext";
+import { StyleSheet } from "react-native";
 
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
-const API_URL = "http://192.168.1.244:5143/api/profile";
+const API_URL = "http://172.19.159.72:5143/api/profile";
 
 export default function ProfileScreen({ navigation }: ProfileScreenProps) {
   const { login } = useAuth();
@@ -131,6 +133,11 @@ setUsername (data.username);
     fetchProfile();
   }, [token]);
 
+  const handleLogout = () => {
+    authContext.logout();
+    navigation.reset({ index: 0, routes: [{ name: "Atrium" }] });
+  };
+
   const handleSubmit = async () => {
     // Assuming you have form fields like 'username', 'email', etc.
     if (
@@ -217,7 +224,7 @@ setUsername (data.username);
   } */
 
   return (
-    <View>
+    <ScrollView>
       <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
         Login Screen
       </Text>
@@ -238,21 +245,21 @@ setUsername (data.username);
         placeholder="Enter first name"
         value={firstName}
         onChangeText={(newText) => setFirstName(newText)}
-        style={{ fontSize: fontContext?.fontSize || 16 }}
+        style={[styles.input, { fontSize: fontContext?.fontSize || 16 }]}
       />
 
       <TextInput
         placeholder="Enter last name"
         value={lastName}
         onChangeText={(newText) => setLastName(newText)}
-        style={{ fontSize: fontContext?.fontSize || 16 }}
+        style={[styles.input, { fontSize: fontContext?.fontSize || 16 }]}
       />
 
       <TextInput
         placeholder="Enter email"
         value={email}
         onChangeText={(newText) => setEmail(newText)}
-        style={{ fontSize: fontContext?.fontSize || 16 }}
+        style={[styles.input, { fontSize: fontContext?.fontSize || 16 }]}
       />
 
       <Text style={{ fontSize: fontContext?.fontSize || 16 }}>
@@ -311,19 +318,20 @@ setUsername (data.username);
         Membership date: {membershipDate}
       </Text> */}
 
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text
-          style={{
-            color: "white",
-            fontSize: fontContext?.fontSize || 16,
-            backgroundColor: "black",
-          }}
-        >
-          Submit
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.bottomButtons}>
+        <TouchableOpacity style={styles.buttonLeft} onPress={handleSubmit}>
+          <Text
+            style={{
+              color: "white",
+              fontSize: fontContext?.fontSize || 16,
+              //backgroundColor: "black",
+            }}
+          >
+            Submit
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        {/*       <TouchableOpacity onPress={() => navigation.navigate("Register")}>
         <Text
           style={{
             color: "white",
@@ -333,19 +341,52 @@ setUsername (data.username);
         >
           Register
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
-        <Text
-          style={{
-            color: "white",
-            fontSize: fontContext?.fontSize || 16,
-            backgroundColor: "black",
-          }}
+        <TouchableOpacity
+          style={styles.buttonRight}
+          onPress={() => navigation.navigate("Settings")}
         >
-          Settings
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={{
+              color: "white",
+              fontSize: fontContext?.fontSize || 16,
+              //backgroundColor: "black",
+            }}
+          >
+            Settings
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.bottomButtons}>
+        <TouchableOpacity
+          style={styles.buttonRight}
+          onPress={() => navigation.goBack()}
+        >
+          <Text
+            style={{
+              color: "white",
+              fontSize: fontContext?.fontSize || 16,
+              //backgroundColor: "black",
+            }}
+          >
+            Back
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonRight} onPress={handleLogout}>
+          <Text
+            style={{
+              color: "white",
+              fontSize: fontContext?.fontSize || 16,
+              //backgroundColor: "black",
+            }}
+          >
+            Logout
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       {/*       <Button title="Submit" onPress={handleSubmit} />
 
@@ -359,6 +400,70 @@ setUsername (data.username);
         onPress={() => navigation.navigate("Settings")}
       />
  */}
-    </View>
+    </ScrollView>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingBottom: 100,
+    backgroundColor: "#FFF5E6",
+  },
+
+  list: {},
+
+  input: {
+    backgroundColor: "blue",
+    color: "white",
+    borderRadius: 10,
+    margin: 20,
+  },
+
+  bottomButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 30,
+  },
+
+  buttonLeft: {
+    flex: 1,
+    marginRight: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  buttonRight: {
+    flex: 1,
+    marginLeft: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  backButton: {
+    backgroundColor: "black",
+    borderRadius: 15,
+  },
+  buttonDisabled: {
+    backgroundColor: "grey",
+  },
+  bulletinButton: {
+    backgroundColor: "blue",
+    borderRadius: 15,
+    marginBottom: 10,
+  },
+  bulletinText: {
+    color: "white",
+  },
+});

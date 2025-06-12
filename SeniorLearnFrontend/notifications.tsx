@@ -21,10 +21,11 @@ const NotificationsSwitch: React.FC<NotificationsSwitchProps> = ({
       <View
         style={{
           width: 50,
-          height: 30,
+          height: 50,
           backgroundColor: value ? "green" : "gray",
           justifyContent: "center",
           alignItems: value ? "flex-end" : "flex-start",
+          marginTop: 10,
         }}
       >
         <Text style={{ fontSize }}>{value ? "Yes" : "No"}</Text>
