@@ -1,9 +1,16 @@
 {
   "expo": {
+<<<<<<< HEAD
     "name": "myApp",
     "slug": "myApp",
     "version": "1.0.0",
     "orientation": "default",
+=======
+    "name": "SeniorLearnFrontend",
+    "slug": "SeniorLearnFrontend",
+    "version": "1.0.0",
+    "orientation": "portrait",
+>>>>>>> 632fe54fdd51849a71c48cb01c50341b42939bc0
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
